@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace api
 {
@@ -19,6 +17,9 @@ namespace api
             };
             // Remove XML formatter
             config.Formatters.Remove(config.Formatters.XmlFormatter);
+
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
 
 
             // Web API routes
