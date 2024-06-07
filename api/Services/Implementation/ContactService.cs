@@ -1,6 +1,7 @@
 ﻿using api.Data.Repositories.Abstraction;
 using api.Models;
 using api.Services.Abstraction;
+using StructureMap.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +28,32 @@ namespace api.Services.Implementation
             return _contactRepository.CountAll();
         }
 
-        public IEnumerable<Contact> FindAllContacts(int pageNumber, int pageSize, string sortField, string term)
+        public ContactGridViewModel FindAllContacts(GetAllContactsRequest model)
         {
-            return _contactRepository.FindAll(pageNumber, pageSize, sortField, term);
-        }
+            int totalCount;
 
+            if (model.PageSize < 1) model.PageSize = 10;
+
+            if (string.IsNullOrWhiteSpace(model.Term)) totalCount = this.CountAllContacts();
+            else totalCount = this.CountContactsByTerm(model.Term);
+
+            int totalPages = (int)Math.Ceiling((double)totalCount / model.PageSize);
+
+            if (model.PageNumber > totalPages || model.PageNumber < 1) model.PageNumber = 1;
+
+            var contactGridViewModel = new ContactGridViewModel
+            {
+                PageNumber = model.PageNumber,
+                PageSize = model.PageSize,
+                TotalPages = totalPages,
+                Sort = model.SortField,
+                SearchTerm = model.Term,
+                TotalItemsNumber = totalCount,
+                Contacts = _contactRepository.FindAll(model.SortField, model.Term, model.PageNumber, model.PageSize)
+            };
+
+            return contactGridViewModel;
+        }
         public Contact FindContactByID(int id)
         {
             return _contactRepository.FindByID(id);

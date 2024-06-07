@@ -12,7 +12,7 @@ namespace api.Data.Repositories
 
         T FindByID(int id);
 
-        IEnumerable<T> FindAll(int pageNumber, int pageSize, string sortField, string term);
+        IEnumerable<T> FindAll(string sortField, string term, int pageNumber = 1, int pageSize = 10);
         int CountAll();
     }
 }

@@ -10,7 +10,7 @@ namespace api.Services.Abstraction
     {
         int AddContact(Contact item);
         int CountAllContacts();
-        IEnumerable<Contact> FindAllContacts(int pageNumber, int pageSize, string sortField, string term);
+        ContactGridViewModel FindAllContacts(GetAllContactsRequest model);
         Contact FindContactByID(int id);
         void RemoveContact(int id);
         void UpdateContact(Contact item);

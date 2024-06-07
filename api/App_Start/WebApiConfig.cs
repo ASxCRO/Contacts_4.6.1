@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Net.Http.Headers;
 
 namespace api
 {
@@ -18,6 +19,8 @@ namespace api
             // Remove XML formatter
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
+
             var cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
 
@@ -31,6 +34,7 @@ namespace api
                 defaults: new { id = RouteParameter.Optional }
 
             );
+
         }
     }
 }

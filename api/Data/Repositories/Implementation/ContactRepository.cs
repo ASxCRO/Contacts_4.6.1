@@ -41,15 +41,15 @@ namespace api.Data.Repositories.Implementation
             }
         }
 
-        public IEnumerable<Contact> FindAll(int pageNumber, int pageSize, string sortField, string term)
+        public IEnumerable<Contact> FindAll(string sortField, string term, int pageNumber = 1, int pageSize = 10)
         {
             using (var connection = _connectionFactory.CreateConnection())
             {
                 return connection.Query<Contact>(
-                    "sp_FindAllContacts",
-                    new { PageNumber = pageNumber, PageSize = pageSize, SortField = sortField, Term = term },
-                    commandType: CommandType.StoredProcedure
-                );
+                "sp_FindAllContacts",
+                new { PageNumber = pageNumber, PageSize = pageSize, SortField = sortField, Term = term },
+                commandType: CommandType.StoredProcedure);
+                
             }
         }
 

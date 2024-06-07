@@ -2,6 +2,7 @@
 using api.Services.Abstraction;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Web.Http;
 
 namespace api.Controllers
@@ -28,10 +29,10 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetAllContacts(int pageNumber, int pageSize, string sortField, string term)
+        public IHttpActionResult GetAllContacts([FromUri]GetAllContactsRequest model)
         {
-            IEnumerable<Contact> contacts = _contactService.FindAllContacts(pageNumber, pageSize, sortField, term);
-            return Ok(contacts);
+            var data =  _contactService.FindAllContacts(model);
+            return Ok(data);
         }
 
         [HttpGet]
