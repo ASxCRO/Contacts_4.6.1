@@ -10,13 +10,12 @@ namespace api
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
             config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(), // Use camelCase for JSON properties
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc // Ensure all dates are in UTC format
+                ContractResolver = new CamelCasePropertyNamesContractResolver(), 
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc
             };
-            // Remove XML formatter
+
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
