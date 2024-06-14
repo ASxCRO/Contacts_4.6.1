@@ -1,5 +1,5 @@
-﻿using api.Models;
-using api.Services.Abstraction;
+﻿using axians.contacts.services.Models;
+using axians.contacts.services.Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -29,6 +29,7 @@ namespace api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IHttpActionResult GetAllContacts([FromUri]GetAllContactsRequest model)
         {
             var data =  _contactService.FindAllContacts(model);

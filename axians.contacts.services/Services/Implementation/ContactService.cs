@@ -1,13 +1,9 @@
-﻿using api.Data.Repositories.Abstraction;
-using api.Models;
-using api.Services.Abstraction;
-using StructureMap.Query;
+﻿using axians.contacts.services.Services.Abstraction;
+using axians.contacts.services.Data.Repositories.Abstraction;
+using axians.contacts.services.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace api.Services.Implementation
+namespace axians.contacts.services.Services.Implementation
 {
     public class ContactService : IContactService
     {
@@ -34,7 +30,7 @@ namespace api.Services.Implementation
 
             if (model.PageSize < 1) model.PageSize = 10;
 
-            if (string.IsNullOrWhiteSpace(model.Term)) totalCount = this.CountAllContacts();
+            if (string.IsNullOrWhiteSpace(model.Term)) totalCount = CountAllContacts();
             else totalCount = this.CountContactsByTerm(model.Term);
 
             int totalPages = (int)Math.Ceiling((double)totalCount / model.PageSize);

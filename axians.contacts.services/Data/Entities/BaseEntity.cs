@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace api.Models
+namespace axians.contacts.services.Models
 {
     public abstract class BaseEntity<T>
     {

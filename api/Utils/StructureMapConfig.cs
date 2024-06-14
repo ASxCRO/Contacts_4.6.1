@@ -1,9 +1,10 @@
-﻿using api.Data;
-using api.Data.Repositories.Abstraction;
-using api.Data.Repositories.Implementation;
-using api.Services.Abstraction;
-using api.Services.Implementation;
+﻿using axians.contacts.services.Data;
+using axians.contacts.services.Data.Repositories.Abstraction;
+using axians.contacts.services.Data.Repositories.Implementation;
+using axians.contacts.services.Services.Abstraction;
+using axians.contacts.services.Services.Implementation;
 using StructureMap;
+using System.Configuration;
 using System.Web.Http;
 
 namespace api.Utils
@@ -14,10 +15,13 @@ namespace api.Utils
         {
             var container = new Container();
 
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
             container.Configure(c =>
             {
-                c.For<DbConnectionFactory>().Use<DbConnectionFactory>();
+                c.For<DbConnectionFactory>().Use(() => new DbConnectionFactory(connectionString));
                 c.For<IContactRepository>().Use<ContactRepository>();
+                c.For<IAuthRepository>().Use<AuthRepository>();
                 c.For<IContactService>().Use<ContactService>();
             });
 

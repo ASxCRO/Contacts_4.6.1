@@ -1,6 +1,6 @@
-﻿using api.Models;
+﻿using axians.contacts.services.Models;
 
-namespace api.Data.Repositories.Abstraction
+namespace axians.contacts.services.Data.Repositories.Abstraction
 {
     public interface IContactRepository : IRepository<Contact>
     {

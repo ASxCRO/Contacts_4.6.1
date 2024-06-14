@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Net.Http.Headers;
+using System.Web.Http.ExceptionHandling;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace api
 {
@@ -10,6 +13,8 @@ namespace api
     {
         public static void Register(HttpConfiguration config)
         {
+            config.Services.Replace(typeof(IExceptionHandler), new Utils.GlobalExceptionHandler());
+
             config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(), 
@@ -23,6 +28,7 @@ namespace api
             var cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
 
+            ConfigureOAuthTokenGeneration(config);
 
             // Web API routes
             config.MapHttpAttributeRoutes();
@@ -34,6 +40,25 @@ namespace api
 
             );
 
+        }
+
+        private static void ConfigureOAuthTokenGeneration(HttpConfiguration config)
+        {
+            var issuer = "your_issuer";
+            var audience = "your_audience";
+            var key = Encoding.ASCII.GetBytes("<f?i^vfa1@H?ysc8(D0u6uCz]?3x5*e");
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = issuer,
+                ValidAudience = audience,
+                IssuerSigningKey = new SymmetricSecurityKey(key)
+            };
+
+            config.Filters.Add(new Utils.JwtAuthenticationFilter(tokenValidationParameters));
         }
     }
 }

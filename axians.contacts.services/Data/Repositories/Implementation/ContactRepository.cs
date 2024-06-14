@@ -1,21 +1,19 @@
-﻿using api.Data.Repositories.Abstraction;
-using api.Models;
+﻿using axians.contacts.services.Data.Repositories.Abstraction;
+using axians.contacts.services.Models;
 using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace api.Data.Repositories.Implementation
+namespace axians.contacts.services.Data.Repositories.Implementation
 {
     public class ContactRepository : IContactRepository
     {
-
         private readonly DbConnectionFactory _connectionFactory;
 
         public ContactRepository(DbConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
-
         }
 
         public int Add(Contact item)
@@ -23,8 +21,8 @@ namespace api.Data.Repositories.Implementation
             using (var connection = _connectionFactory.CreateConnection())
             {
                 return connection.QuerySingle<int>(
-                    "sp_AddContact",
-                    new { item.FirstName, item.Email, item.LastName },
+                    "spManageContact",
+                    new { FirstName = item.FirstName, Email = item.Email, LastName = item.LastName },
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -35,7 +33,7 @@ namespace api.Data.Repositories.Implementation
             using (var connection = _connectionFactory.CreateConnection())
             {
                 return connection.ExecuteScalar<int>(
-                    "sp_CountAllContacts",
+                    "spCountAllContacts",
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -46,10 +44,10 @@ namespace api.Data.Repositories.Implementation
             using (var connection = _connectionFactory.CreateConnection())
             {
                 return connection.Query<Contact>(
-                "sp_FindAllContacts",
-                new { PageNumber = pageNumber, PageSize = pageSize, SortField = sortField, Term = term },
-                commandType: CommandType.StoredProcedure);
-                
+                    "spFindAllContacts",
+                    new { PageNumber = pageNumber, PageSize = pageSize, SortField = sortField, Term = term },
+                    commandType: CommandType.StoredProcedure
+                );
             }
         }
 
@@ -58,7 +56,7 @@ namespace api.Data.Repositories.Implementation
             using (var connection = _connectionFactory.CreateConnection())
             {
                 return connection.QuerySingleOrDefault<Contact>(
-                    "sp_FindContactByID",
+                    "spFindContactByID",
                     new { ID = id },
                     commandType: CommandType.StoredProcedure
                 );
@@ -70,8 +68,8 @@ namespace api.Data.Repositories.Implementation
             using (var connection = _connectionFactory.CreateConnection())
             {
                 connection.Execute(
-                    "sp_RemoveContact",
-                    new { ID = id },
+                    "spManageContact",
+                    new { ID = id, IsDelete = true },
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -82,8 +80,8 @@ namespace api.Data.Repositories.Implementation
             using (var connection = _connectionFactory.CreateConnection())
             {
                 connection.Execute(
-                    "sp_UpdateContact",
-                    new { item.Id, item.FirstName, item.Email, item.LastName },
+                    "spManageContact",
+                    new { ID = item.Id, FirstName = item.FirstName, Email = item.Email, LastName = item.LastName },
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -94,7 +92,7 @@ namespace api.Data.Repositories.Implementation
             using (var connection = _connectionFactory.CreateConnection())
             {
                 return connection.ExecuteScalar<int>(
-                    "sp_CountContactsByTerm",
+                    "spCountContactsByTerm",
                     new { Term = term },
                     commandType: CommandType.StoredProcedure
                 );

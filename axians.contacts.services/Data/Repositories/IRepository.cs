@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace api.Data.Repositories
+namespace axians.contacts.services.Data.Repositories
 {
     public interface IRepository<T> where T : class
     {

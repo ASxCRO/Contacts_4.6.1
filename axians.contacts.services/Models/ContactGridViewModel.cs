@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace api.Models
+namespace axians.contacts.services.Models
 {
     public class ContactGridViewModel : GridPager
     {
