@@ -1,7 +1,5 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
-using System.Runtime.Remoting.Messaging;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.Results;
 using NLog;
@@ -17,7 +15,8 @@ namespace api.Utils
             logger.Error(context.Exception, "Error in axinas.contacts.webapi");
 
             var response = context.Request.CreateResponse(HttpStatusCode.InternalServerError,
-                                                          new { Message = "An error occurred, please try again later." });
+                                                          new { Message = "Greška na serveru, pokušajte kasnije" });
+
             response.Headers.Add("X-Error", context.Exception.Message);
 
             context.Result = new ResponseMessageResult(response);

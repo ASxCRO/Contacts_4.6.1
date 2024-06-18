@@ -11,6 +11,7 @@ namespace api
     {
 
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         protected void Application_Start()
         {
             NLog.LogManager.LoadConfiguration("NLog.config");

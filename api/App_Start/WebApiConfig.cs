@@ -30,7 +30,6 @@ namespace api
 
             ConfigureOAuthTokenGeneration(config);
 
-            // Web API routes
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
