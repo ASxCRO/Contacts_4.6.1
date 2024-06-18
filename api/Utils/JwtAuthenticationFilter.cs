@@ -39,7 +39,6 @@ namespace api.Utils
 
             if (token == null)
             {
-                // No token provided
                 context.ErrorResult = new AuthenticationFailureResult("Missing token", context.Request);
                 return Task.CompletedTask;
             }
@@ -54,7 +53,6 @@ namespace api.Utils
             }
             catch (Exception ex)
             {
-                // Token validation failed
                 context.ErrorResult = new AuthenticationFailureResult("Invalid token", context.Request);
             }
 
