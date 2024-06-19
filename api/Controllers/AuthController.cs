@@ -43,6 +43,8 @@ namespace api.Controllers
 
             var userId = _authRepository.RegisterUser(model.Username, passwordHash, model.FullName);
 
+            logger.Info($"{model.Username} registered");
+
             return Ok(new { UserId = userId });
         }
 
