@@ -1,8 +1,7 @@
 ﻿using axians.contacts.services.Models;
 using axians.contacts.services.Services.Abstraction;
+using NLog;
 using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Web.Http;
 
 namespace api.Controllers
@@ -10,6 +9,7 @@ namespace api.Controllers
     public class ContactController : ApiController
     {
         private readonly IContactService _contactService;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public ContactController(IContactService contactService)
         {
@@ -25,6 +25,8 @@ namespace api.Controllers
             }
 
             int contactId = _contactService.AddContact(contact);
+
+            logger.Info($"{this.RequestContext.Principal.Identity.Name} added contact: {contact.Email}");
             return Ok(contactId);
         }
 
@@ -54,9 +56,11 @@ namespace api.Controllers
             if (contact == null || id != contact.Id)
             {
                 return BadRequest();
-            }
+            }  
 
             _contactService.UpdateContact(contact);
+
+            logger.Info($"{this.RequestContext.Principal.Identity.Name} updated contact with id {id}");
             return Ok();
         }
 
@@ -64,6 +68,8 @@ namespace api.Controllers
         public IHttpActionResult DeleteContact(int id)
         {
             _contactService.RemoveContact(id);
+
+            logger.Info($"{this.RequestContext.Principal.Identity.Name} deleted contact with id {id}");
             return Ok();
         }
     }

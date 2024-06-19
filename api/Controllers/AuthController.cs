@@ -9,6 +9,7 @@ using axians.contacts.services.Data.Repositories.Implementation;
 using Microsoft.IdentityModel.Tokens;
 using axians.contacts.services.Models;
 using api.Utils;
+using NLog;
 
 namespace api.Controllers
 {
@@ -16,6 +17,7 @@ namespace api.Controllers
     public class AuthController : ApiController
     {
         private IAuthRepository _authRepository;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public AuthController(IAuthRepository authRepository)
         {
@@ -61,9 +63,12 @@ namespace api.Controllers
                 return Unauthorized();
             }
 
+            logger.Info($"{model.Username} logged in");
+
             var identity = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Name, model.Username)
+                new Claim(ClaimTypes.Name, model.Username),
+                new Claim(ClaimTypes.NameIdentifier, _authRepository.GetIdByUsername(model.Username).ToString()),
             });
 
             var tokenString = TokenHelper.GenerateToken(identity);

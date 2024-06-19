@@ -3,8 +3,10 @@ using axians.contacts.services.Data.Repositories.Abstraction;
 using axians.contacts.services.Data.Repositories.Implementation;
 using axians.contacts.services.Services.Abstraction;
 using axians.contacts.services.Services.Implementation;
+using NLog.Web;
 using StructureMap;
 using System.Configuration;
+using System.Web;
 using System.Web.Http;
 
 namespace api.Utils
@@ -19,6 +21,7 @@ namespace api.Utils
 
             container.Configure(c =>
             {
+                c.For<IUserContext>().Use<UserContext>();
                 c.For<DbConnectionFactory>().Use(() => new DbConnectionFactory(connectionString));
                 c.For<IContactRepository>().Use<ContactRepository>();
                 c.For<IAuthRepository>().Use<AuthRepository>();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -14,7 +15,7 @@ namespace api.Utils
         public static string GenerateToken(ClaimsIdentity identity)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("<f?i^vfa1@H?ysc8(D0u6uCz]?3x5*e");
+            var key = Encoding.ASCII.GetBytes(ConfigurationManager.AppSettings["jwt_key"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = identity,

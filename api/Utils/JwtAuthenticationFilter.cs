@@ -8,6 +8,7 @@ using System.Threading;
 using System.Web.Http.Filters;
 using System.Net.Http;
 using System.Web.Http;
+using NLog;
 
 namespace api.Utils
 {
@@ -15,6 +16,8 @@ namespace api.Utils
     public class JwtAuthenticationFilter : IAuthenticationFilter
     {
         private readonly TokenValidationParameters _validationParameters;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
 
         public JwtAuthenticationFilter(TokenValidationParameters validationParameters)
         {
@@ -40,6 +43,7 @@ namespace api.Utils
             if (token == null)
             {
                 context.ErrorResult = new AuthenticationFailureResult("Missing token", context.Request);
+                logger.Error($"authentication error missing token");
                 return Task.CompletedTask;
             }
 
@@ -54,6 +58,7 @@ namespace api.Utils
             catch (Exception ex)
             {
                 context.ErrorResult = new AuthenticationFailureResult("Invalid token", context.Request);
+                logger.Error(ex,"authentication error");
             }
 
             return Task.CompletedTask;

@@ -1,7 +1,9 @@
 ﻿using axians.contacts.services.Data.Repositories.Abstraction;
 using axians.contacts.services.Models;
+using axians.contacts.services.Services.Abstraction;
 using Dapper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 
@@ -10,10 +12,12 @@ namespace axians.contacts.services.Data.Repositories.Implementation
     public class ContactRepository : IContactRepository
     {
         private readonly DbConnectionFactory _connectionFactory;
+        private readonly IUserContext _userContext;
 
-        public ContactRepository(DbConnectionFactory connectionFactory)
+        public ContactRepository(DbConnectionFactory connectionFactory, IUserContext userContext)
         {
             _connectionFactory = connectionFactory;
+            _userContext = userContext;
         }
 
         public int Add(Contact item)
@@ -22,7 +26,7 @@ namespace axians.contacts.services.Data.Repositories.Implementation
             {
                 return connection.QuerySingle<int>(
                     "spManageContact",
-                    new { FirstName = item.FirstName, Email = item.Email, LastName = item.LastName },
+                    new { FirstName = item.FirstName, Email = item.Email, LastName = item.LastName, UserId = (int)_userContext.UserId },
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -34,6 +38,7 @@ namespace axians.contacts.services.Data.Repositories.Implementation
             {
                 return connection.ExecuteScalar<int>(
                     "spCountAllContacts",
+                    new {UserId = (int)_userContext.UserId },
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -45,7 +50,7 @@ namespace axians.contacts.services.Data.Repositories.Implementation
             {
                 return connection.Query<Contact>(
                     "spFindAllContacts",
-                    new { PageNumber = pageNumber, PageSize = pageSize, SortField = sortField, Term = term },
+                    new { PageNumber = pageNumber, PageSize = pageSize, SortField = sortField, Term = term, UserId = (int)_userContext.UserId },
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -69,7 +74,7 @@ namespace axians.contacts.services.Data.Repositories.Implementation
             {
                 connection.Execute(
                     "spManageContact",
-                    new { ID = id, IsDelete = true },
+                    new { ID = id, IsDelete = true, UserId = (int)_userContext.UserId },
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -81,7 +86,7 @@ namespace axians.contacts.services.Data.Repositories.Implementation
             {
                 connection.Execute(
                     "spManageContact",
-                    new { ID = item.Id, FirstName = item.FirstName, Email = item.Email, LastName = item.LastName },
+                    new { ID = item.Id, FirstName = item.FirstName, Email = item.Email, LastName = item.LastName, UserId = (int)_userContext.UserId },
                     commandType: CommandType.StoredProcedure
                 );
             }
@@ -93,7 +98,7 @@ namespace axians.contacts.services.Data.Repositories.Implementation
             {
                 return connection.ExecuteScalar<int>(
                     "spCountContactsByTerm",
-                    new { Term = term },
+                    new { Term = term, UserId = (int)_userContext.UserId },
                     commandType: CommandType.StoredProcedure
                 );
             }

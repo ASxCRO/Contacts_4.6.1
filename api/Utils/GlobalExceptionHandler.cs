@@ -12,7 +12,7 @@ namespace api.Utils
 
         public override void Handle(ExceptionHandlerContext context)
         {
-            logger.Error(context.Exception, "Error in axinas.contacts.webapi");
+            logger.Error(context.Exception, "Unhandler server error in axinas.contacts.webapi");
 
             var response = context.Request.CreateResponse(HttpStatusCode.InternalServerError,
                                                           new { Message = "Greška na serveru, pokušajte kasnije" });

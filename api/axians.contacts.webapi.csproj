@@ -267,6 +267,7 @@
     <Compile Include="Utils\StructureMapConfig.cs" />
     <Compile Include="Utils\StructureMapDependencyResolver.cs" />
     <Compile Include="Utils\TokenHelper.cs" />
+    <Compile Include="Utils\UserContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

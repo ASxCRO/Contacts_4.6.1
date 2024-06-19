@@ -46,5 +46,15 @@ namespace axians.contacts.services.Data.Repositories.Implementation
                 return storedPassword == password;
             }
         }
+
+        public int GetIdByUsername(string username)
+        {
+            using (IDbConnection db = _connectionFactory.CreateConnection())
+            {
+                string query = "SELECT Id FROM Users WHERE Username = @Username";
+                var id = db.ExecuteScalar<int>(query, new { Username = username });
+                return id;
+            }
+        }
     }
 }
