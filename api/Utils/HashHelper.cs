@@ -16,7 +16,6 @@ namespace api.Utils
                 byte[] inputBytes = Encoding.UTF8.GetBytes(input);
                 byte[] hashBytes = sha256.ComputeHash(inputBytes);
 
-                // Convert byte array to a hexadecimal string
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < hashBytes.Length; i++)
                 {
