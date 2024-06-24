@@ -28,6 +28,8 @@ namespace api
             var cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
 
+            config.MessageHandlers.Add(new RequestBodyLoggingMiddleware());
+
             ConfigureOAuthTokenGeneration(config);
 
             config.MapHttpAttributeRoutes();
