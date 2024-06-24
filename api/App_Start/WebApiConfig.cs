@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Web.Http.ExceptionHandling;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using api.Utils;
 
 namespace api
 {
@@ -40,7 +41,6 @@ namespace api
                 defaults: new { id = RouteParameter.Optional }
 
             );
-
         }
 
         private static void ConfigureOAuthTokenGeneration(HttpConfiguration config)

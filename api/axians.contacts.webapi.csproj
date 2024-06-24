@@ -261,9 +261,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\AuthenticationFailureResult.cs" />
     <Compile Include="Utils\GlobalExceptionHandler.cs" />
     <Compile Include="Utils\HashHelper.cs" />
     <Compile Include="Utils\JwtAuthenticationFilter.cs" />
+    <Compile Include="Utils\RequestBodyLoggingMiddleware.cs" />
     <Compile Include="Utils\StructureMapConfig.cs" />
     <Compile Include="Utils\StructureMapDependencyResolver.cs" />
     <Compile Include="Utils\TokenHelper.cs" />
