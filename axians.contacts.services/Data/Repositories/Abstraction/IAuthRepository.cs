@@ -1,6 +1,4 @@
-﻿using axians.contacts.services.Data.Entities;
-
-namespace axians.contacts.services.Data.Repositories.Abstraction
+﻿namespace axians.contacts.services.Data.Repositories.Abstraction
 {
     public interface IAuthRepository
     {

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿// Uncomment the following to provide samples for PageResult<T>. Must also add the Microsoft.AspNet.WebApi.OData
+// package to your project.
+////#define Handle_PageResultOfT
+
 using System.Web.Mvc;
 using System.Web.Routing;
 

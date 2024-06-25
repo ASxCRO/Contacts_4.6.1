@@ -1,16 +1,13 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Web;
 
-namespace api.Utils
+namespace axians.contacts.services.Services.Implementation
 {
-    public static class TokenHelper
+    public static class TokenService
     {
         public static string GenerateToken(ClaimsIdentity identity)
         {

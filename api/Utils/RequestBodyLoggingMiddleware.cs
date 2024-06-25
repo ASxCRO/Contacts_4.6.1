@@ -1,16 +1,20 @@
 ﻿using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
+using System.Configuration;
 
 namespace api.Utils
 {
     public class RequestBodyLoggingMiddleware : DelegatingHandler
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly string _maskingPattern;
+
+        public RequestBodyLoggingMiddleware()
+        {
+            _maskingPattern = ConfigurationManager.AppSettings["masking_pattern"];
+        }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
         {
@@ -19,10 +23,10 @@ namespace api.Utils
                 var requestBody = await request.Content.ReadAsStringAsync();
                 if (IsLoginOrRegisterRequest(request.RequestUri.ToString()))
                 {
-                    requestBody = MaskPassword(requestBody);
+                    requestBody = MaskSensitiveData(requestBody);
                 }
 
-                if(!string.IsNullOrWhiteSpace(requestBody))
+                if (!string.IsNullOrWhiteSpace(requestBody))
                 {
                     logger.Info($"{requestBody}");
                 }
@@ -36,25 +40,14 @@ namespace api.Utils
             return url.Contains("login") || url.Contains("register");
         }
 
-        private string MaskPassword(string requestBody)
+        private string MaskSensitiveData(string requestBody)
         {
-            var maskedRequestBody = requestBody;
-            var passwordKey = "\"password\"";
-            var passwordIndex = requestBody.IndexOf(passwordKey, StringComparison.OrdinalIgnoreCase);
-
-            if (passwordIndex >= 0)
+            if (string.IsNullOrEmpty(_maskingPattern))
             {
-                var startIndex = passwordIndex + passwordKey.Length + 1;
-                var endIndex = requestBody.IndexOf('"', startIndex + 1);
-
-                if (endIndex > startIndex)
-                {
-                    var password = requestBody.Substring(startIndex, endIndex - startIndex);
-                    maskedRequestBody = requestBody.Replace(password, "****");
-                }
+                return requestBody;
             }
 
-            return maskedRequestBody;
+            return Regex.Replace(requestBody, _maskingPattern, "\"password\":\"******\"", RegexOptions.IgnoreCase);
         }
     }
 }

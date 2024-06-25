@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace axians.contacts.services.Models
+﻿namespace axians.contacts.services.Models
 {
     public class UserLoginModel
     {

@@ -7,6 +7,7 @@ using System.Web.Http.ExceptionHandling;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using api.Utils;
+using System.Configuration;
 
 namespace api
 {
@@ -26,7 +27,11 @@ namespace api
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
 
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            var cors = new EnableCorsAttribute(
+                ConfigurationManager.AppSettings["cors_origins"],
+                ConfigurationManager.AppSettings["cors_headers"],
+                ConfigurationManager.AppSettings["cors_methods"]);
+
             config.EnableCors(cors);
 
             config.MessageHandlers.Add(new RequestBodyLoggingMiddleware());
@@ -45,9 +50,9 @@ namespace api
 
         private static void ConfigureOAuthTokenGeneration(HttpConfiguration config)
         {
-            var issuer = "your_issuer";
-            var audience = "your_audience";
-            var key = Encoding.ASCII.GetBytes("<f?i^vfa1@H?ysc8(D0u6uCz]?3x5*e");
+            var issuer = ConfigurationManager.AppSettings["jwt_issuer"];
+            var audience = ConfigurationManager.AppSettings["jwt_audience"];
+            var key = Encoding.ASCII.GetBytes(ConfigurationManager.AppSettings["jwt_key"]);
 
             var tokenValidationParameters = new TokenValidationParameters
             {

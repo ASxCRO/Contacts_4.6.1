@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Reflection;
 using axians.contacts.services.Data.Repositories.Abstraction;
 using Dapper;
 
@@ -18,8 +17,12 @@ namespace axians.contacts.services.Data.Repositories.Implementation
         {
             using (IDbConnection db = _connectionFactory.CreateConnection())
             {
-                string query = "SELECT COUNT(1) FROM Users WHERE Username = @Username";
-                var count = db.ExecuteScalar<int>(query, new { Username = username });
+                string procedureName = "spUserExists";
+                var count = db.ExecuteScalar<int>(
+                    procedureName,
+                    new { Username = username },
+                    commandType: CommandType.StoredProcedure
+                );
                 return count > 0;
             }
         }
@@ -28,11 +31,13 @@ namespace axians.contacts.services.Data.Repositories.Implementation
         {
             using (IDbConnection db = _connectionFactory.CreateConnection())
             {
-                string query = @"INSERT INTO Users (Username, PasswordHash, FullName)
-                                 VALUES (@Username, @PasswordHash, @FullName);
-                                 SELECT CAST(SCOPE_IDENTITY() as int)";
+                string procedureName = "spRegisterUser";
                 var parameters = new { Username = username, PasswordHash = password, FullName = fullName };
-                return db.QueryFirstOrDefault<int>(query, parameters);
+                return db.QueryFirstOrDefault<int>(
+                    procedureName,
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
             }
         }
 
@@ -40,8 +45,12 @@ namespace axians.contacts.services.Data.Repositories.Implementation
         {
             using (IDbConnection db = _connectionFactory.CreateConnection())
             {
-                string query = "SELECT PasswordHash FROM Users WHERE Username = @Username";
-                var storedPassword =  db.ExecuteScalar<string>(query, new { Username = username });
+                string procedureName = "spValidateUser";
+                var storedPassword = db.ExecuteScalar<string>(
+                    procedureName,
+                    new { Username = username },
+                    commandType: CommandType.StoredProcedure
+                );
 
                 return storedPassword == password;
             }
@@ -51,8 +60,12 @@ namespace axians.contacts.services.Data.Repositories.Implementation
         {
             using (IDbConnection db = _connectionFactory.CreateConnection())
             {
-                string query = "SELECT Id FROM Users WHERE Username = @Username";
-                var id = db.ExecuteScalar<int>(query, new { Username = username });
+                string procedureName = "spGetIdByUsername";
+                var id = db.ExecuteScalar<int>(
+                    procedureName,
+                    new { Username = username },
+                    commandType: CommandType.StoredProcedure
+                );
                 return id;
             }
         }

@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Web.Http.Filters;
-using System.Net.Http;
 using System.Web.Http;
 using NLog;
 

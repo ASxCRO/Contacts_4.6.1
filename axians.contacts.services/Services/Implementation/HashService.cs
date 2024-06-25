@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 
-namespace api.Utils
+namespace axians.contacts.services.Services.Implementation
 {
-    public static class HashHelper
+    public static class HashService
     {
         public static string ComputeSHA256Hash(string input)
         {
